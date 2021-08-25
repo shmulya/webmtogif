@@ -48,10 +48,10 @@ class Converter:
         :return:
         """
         filename_gif = ''.join(filename.split('.')[:-1]) + '.gif'
-        command = "/usr/bin/ffmpeg -i {} -y " \
+        command = f"/usr/bin/ffmpeg -i {filename} -y " \
                   "-filter_complex " \
                   "'fps=10,scale=320:-1:flags=lanczos,split [o1] [o2];[o1] " \
-                  "palettegen [p]; [o2] fifo [o3];[o3] [p] paletteuse' {}".format(filename, filename_gif)
+                  f"palettegen [p]; [o2] fifo [o3];[o3] [p] paletteuse' {filename_gif}"
         try:
             subprocess.run(command, shell=True, check=True, stdout=subprocess.DEVNULL,
                            stderr=open('ffmpeg_error.log', 'a'))
@@ -67,7 +67,7 @@ class Converter:
         :return: status dict
         """
         filename_mp4 = ''.join(filename.split('.')[:-1]) + '.mp4'
-        command = "/usr/bin/ffmpeg -i {} -strict -2 -y {}".format(filename, filename_mp4)
+        command = f"/usr/bin/ffmpeg -i {filename} -strict -2 -y {filename_mp4}"
         try:
             subprocess.run(command, shell=True, check=True, stdout=subprocess.DEVNULL,
                            stderr=open('ffmpeg_error.log', 'a'))

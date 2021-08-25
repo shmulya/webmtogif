@@ -10,7 +10,7 @@ class Bot:
             raise e
         else:
             if response['ok'] is False:
-                raise Exception('{} {}'.format({response["error_code"]}, {response["description"]}))
+                raise Exception(f'{response["error_code"]} {response["description"]}')
 
     def get_updates(self, offset=None, timeout=30):
         params = {'timeout': timeout, 'offset': offset}
@@ -21,7 +21,7 @@ class Bot:
                 return {'status': 'error', 'error': e}
             else:
                 if response['ok'] is False:
-                    return {'status': 'error', 'error': '{} {}'.format(response['error_code'], response['description'])}
+                    return {'status': 'error', 'error': f'{response["error_code"]} {response["description"]}'}
                 else:
                     if len(response['result']) != 0:
                         return {'status': 'ok', 'updates': response['result'],
@@ -35,7 +35,7 @@ class Bot:
             return {'status': 'error', 'error': e}
         else:
             if response['ok'] is False:
-                return {'status': 'error', 'error': '{} {}'.format(response['error_code'], response['description'])}
+                return {'status': 'error', 'error': f'{response["error_code"]} {response["description"]}'}
             else:
                 return {'status': 'ok', 'message_id': response['result']['message_id']}
 
@@ -54,7 +54,7 @@ class Bot:
             return {'status': 'error', 'error': e}
         else:
             if response['ok'] is False:
-                return {'status': 'error', 'error': '{} {}'.format(response['error_code'], response['description'])}
+                return {'status': 'error', 'error': f'{response["error_code"]} {response["description"]}'}
             else:
                 return {'status': 'ok'}
 
@@ -73,7 +73,7 @@ class Bot:
             return {'status': 'error', 'error': e}
         else:
             if response['ok'] is False:
-                return {'status': 'error', 'error': '{} {}'.format(response['error_code'], response['description'])}
+                return {'status': 'error', 'error': f'{response["error_code"]} {response["description"]}'}
             else:
                 return {'status': 'ok'}
 
@@ -85,7 +85,7 @@ class Bot:
             return {'status': 'error', 'error': e}
         else:
             if response['ok'] is False:
-                return {'status': 'error', 'error': '{} {}'.format(response['error_code'], response['description'])}
+                return {'status': 'error', 'error': f'{response["error_code"]} {response["description"]}'}
             else:
                 return {'status': 'ok'}
 
@@ -97,7 +97,7 @@ class Bot:
             return {'status': 'error', 'error': e}
         else:
             if response['ok'] is False:
-                return {'status': 'error', 'error': '{} {}'.format(response['error_code'], response['description'])}
+                return {'status': 'error', 'error': f'{response["error_code"]} {response["description"]}'}
             else:
                 return {'status': 'ok'}
 
@@ -109,7 +109,7 @@ class Bot:
             return {'status': 'error', 'error': e}
         else:
             if response['ok'] is False:
-                return {'status': 'error', 'error': '{} {}'.format(response['error_code'], response['description'])}
+                return {'status': 'error', 'error': f'{response["error_code"]} {response["description"]}'}
             else:
                 return {'status': 'ok'}
 
