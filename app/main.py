@@ -162,10 +162,9 @@ if __name__ == '__main__':
             updates = bot.get_updates(offset)
             if updates['status'] != 'ok':
                 if i < 9:
-                    logging.error('Getting updates error {}/9: {}'.format(i, updates['error']))
+                    logging.error(f'Getting updates error {i}/9: {updates["error"]}')
                 else:
-                    logging.fatal('Getting updates error {}/9: {}'.format(i, updates['error']))
-                    exit()
+                    logging.fatal(f'Getting updates error {i}/9: {updates["error"]}')
             else:
                 break
             i += 1

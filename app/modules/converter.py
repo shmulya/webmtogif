@@ -1,7 +1,7 @@
 import subprocess
 import requests
 from os import getcwd, remove
-
+from modules.pikabu import PikabuVideo
 
 class Converter:
 
@@ -15,6 +15,13 @@ class Converter:
         :param url: source video url
         :return: status dict
         """
+        if 'https://pikabu.ru/story/' in url:
+            pikabu = PikabuVideo()
+            video = pikabu.search_video(url)
+            if video['status'] == 'success':
+                url = video['webm-url']
+            elif video['status'] == 'error':
+                return {'status': 'error', 'error': video['error']}
         try:
             req = requests.get(url)
             if 200 <= req.status_code < 400:
@@ -41,10 +48,10 @@ class Converter:
         :return:
         """
         filename_gif = ''.join(filename.split('.')[:-1]) + '.gif'
-        command = "/usr/bin/ffmpeg -i {} -y " \
+        command = f"/usr/bin/ffmpeg -i {filename} -y " \
                   "-filter_complex " \
                   "'fps=10,scale=320:-1:flags=lanczos,split [o1] [o2];[o1] " \
-                  "palettegen [p]; [o2] fifo [o3];[o3] [p] paletteuse' {}".format(filename, filename_gif)
+                  f"palettegen [p]; [o2] fifo [o3];[o3] [p] paletteuse' {filename_gif}"
         try:
             subprocess.run(command, shell=True, check=True, stdout=subprocess.DEVNULL,
                            stderr=open('ffmpeg_error.log', 'a'))
@@ -60,7 +67,7 @@ class Converter:
         :return: status dict
         """
         filename_mp4 = ''.join(filename.split('.')[:-1]) + '.mp4'
-        command = "/usr/bin/ffmpeg -i {} -strict -2 -y {}".format(filename, filename_mp4)
+        command = f"/usr/bin/ffmpeg -i {filename} -strict -2 -y {filename_mp4}"
         try:
             subprocess.run(command, shell=True, check=True, stdout=subprocess.DEVNULL,
                            stderr=open('ffmpeg_error.log', 'a'))

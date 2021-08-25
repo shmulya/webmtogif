@@ -1,0 +1,13 @@
+[Unit]
+Description=Telegram bot. Converter from webm to gif and mp4
+After=network.target
+
+[Service]
+User=telegram-bot
+Group=telegram-bot
+WorkingDirectory={{ application_path }}
+Environment="PATH={{ application_path }}/bin"
+ExecStart={{ application_path }}/bin/python {{ application_path }}/main.py
+
+[Install]
+WantedBy=multi-user.targetroot
