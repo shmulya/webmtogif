@@ -1,0 +1,11 @@
+---
+
+- name: prepairing host
+  include_tasks: prepare.yml
+  tags:
+    - prepare
+
+- name: deploy tiktok api
+  include_tasks: application.yml
+  tags:
+    - deploy

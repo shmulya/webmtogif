@@ -1,0 +1,9 @@
+[Unit]
+Description=uWSGI instance to tiktokapi backend
+After=network.target
+[Service]
+User=tiktokapi
+WorkingDirectory={{ tiktokapi_workdir }}
+ExecStart=/usr/local/bin/uwsgi --ini uwsgi.ini
+[Install]
+WantedBy=multi-user.target
