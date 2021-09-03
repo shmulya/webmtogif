@@ -1,1 +1,11 @@
-token: "{{ token }}"
+token: "{{ bot_token }}"
+url: "{{ tiktok_api_url }}"
+server: "{{ mysql_server }}"
+username: "{{ mysql_username }}"
+passwd: "{{ mysql_passwd }}"
+db: "{{ mysql_db }}"
+admins:
+  {% for item in bot_admins %}
+  - {{ item }}
+  {% endfor %}
+{{ {'pikabu_cookies': pikabu_cookies} | to_nice_yaml }}

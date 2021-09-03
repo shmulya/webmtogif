@@ -1,0 +1,56 @@
+---
+
+- name: add python 3.8 repository
+  apt_repository:
+    repo: ppa:deadsnakes/ppa
+    codename: bionic
+  tags:
+    - prepare
+
+- name: update apt cache
+  shell:
+    cmd: 'apt update'
+  tags:
+    - prepare
+
+- name: install required packages
+  package:
+    name: '{{ tiktok_api_requirement_packages }}'
+    state: present
+  tags:
+    - prepare
+
+- name: downloading get-pip
+  get_url:
+    url: 'https://bootstrap.pypa.io/get-pip.py'
+    dest: '/tmp/get-pip.py'
+  tags:
+    - prepare
+
+- name: install pip3.8
+  shell:
+    cmd: 'python3.8 /tmp/get-pip.py'
+  tags:
+    - prepare
+
+- name: install billmaster requirements
+  pip:
+    executable: pip3.8
+    name: '{{ tiktok_api_requirement_python_modules }}'
+  tags:
+    - prepare
+
+- name: create user
+  user:
+    name: tiktokapi
+    shell: /bin/bash
+  tags:
+    - prepare
+
+- name: install playwright
+  shell:
+    cmd: 'python3.8 -m playwright install'
+  become: yes
+  become_user: tiktokapi
+  tags:
+    - prepare

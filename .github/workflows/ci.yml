@@ -1,0 +1,43 @@
+name: ci
+
+on:
+  push:
+  pull_request:
+
+jobs:
+  test:
+    runs-on: ubuntu-20.04
+    steps:
+      - uses: actions/checkout@v2
+      - name: Set up python 3.8
+        uses: actions/setup-python@v2
+        with:
+          python-version: 3.8
+      - name: Install dependencies
+        run: |
+          python -m pip install --upgrade pip
+          pip install -r app/dev-requirements.txt
+      - name: setup config
+        # run "base64 -i config/config.yml" and store in gh secrets
+        run: echo "${{ secrets.CONFIG_FILE }}" | base64 -d > app/config/config.yml
+
+      - name: Run tests
+        run: pytest
+
+
+  molecule:
+    runs-on: ubuntu-20.04
+    # FIXME починить переменные и добавить раскатку mysql
+    continue-on-error: true
+    steps:
+      - uses: actions/checkout@v2
+      - name: setup config
+        # run "base64 -i config/config.yml" and store in gh secrets
+        run: echo "${{ secrets.CONFIG_FILE }}" | base64 -d > app/config/config.yml
+      - name: Run ansible deploy tests
+        uses: robertdebock/molecule-action@2.6.17
+        with:
+          image: "docker.io/geerlingguy/docker-ubuntu2004-ansible"
+          scenario: default
+          command: test
+

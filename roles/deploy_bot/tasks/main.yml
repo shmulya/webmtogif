@@ -3,38 +3,50 @@
 - name: stoping bot
   command:
     cmd: "sudo systemctl stop webmtogif"
-  ignore_errors: yes
+  ignore_errors: true
+
+- name: Create user
+  ansible.builtin.user:
+    name: telegram-bot
 
 - name: remove current version
   file:
     path: "{{ application_path }}"
     state: absent
-  become: yes
+  become: true
 
 - name: copy bot files
   copy:
     src: "app/"
     dest: "{{ application_path }}"
-  become: yes
+  become: true
   become_user: telegram-bot
 
 - name: creating virtual environment
   command:
     cmd: "{{ ansible_python_interpreter }} -m venv {{ application_path }}"
-  become: yes
+  become: true
   become_user: telegram-bot
+
+- name: install system deps
+  apt:
+    update_cache: true
+    pkg:
+      - ffmpeg
 
 - name: install depences
   command:
-    cmd: "{{ application_path }}/bin/pip install -r {{ application_path }}/requirements.txt"
-  become: yes
+    cmd: >-
+      {{ application_path }}/bin/pip
+      install -r {{ application_path }}/requirements.txt
+  become: true
   become_user: telegram-bot
 
 - name: create config dir
   file:
     state: directory
     path: "{{ application_path }}/config/"
-  become: yes
+  become: true
   become_user: telegram-bot
 
 - name: create config
@@ -43,14 +55,14 @@
     dest: "{{ application_path }}/config/config.yml"
     owner: telegram-bot
     group: telegram-bot
-  become: yes
+  become: true
   become_user: telegram-bot
 
 - name: create files dir
   file:
     state: directory
     path: "{{ application_path }}/files/"
-  become: yes
+  become: true
   become_user: telegram-bot
 
 - name: create syslog unit
@@ -59,8 +71,12 @@
     dest: "/etc/systemd/system/webmtogif.service"
     owner: root
     group: root
-  ignore_errors: yes
-  become: yes
+  become: true
+  # TODO call systemctl daemon-reload after change file
+
+# - name: enable service bot
+#  command:
+#    cmd: "sudo systemctl enable webmtogif"
 
 - name: starting bot
   command:

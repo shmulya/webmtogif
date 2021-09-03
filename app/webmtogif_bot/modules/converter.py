@@ -1,7 +1,7 @@
 import subprocess
 import requests
 from os import getcwd, remove
-from modules.pikabu import PikabuVideo
+from .pikabu import PikabuVideo
 
 class Converter:
 
@@ -67,7 +67,8 @@ class Converter:
         :return: status dict
         """
         filename_mp4 = ''.join(filename.split('.')[:-1]) + '.mp4'
-        command = f"/usr/bin/ffmpeg -i {filename} -strict -2 -y {filename_mp4}"
+        command = f"/usr/bin/ffmpeg -i {filename} -pix_fmt yuv420p -vcodec libx264 -profile:v main " \
+                  f"-crf 25 -strict -2 -y -movflags faststart {filename_mp4}"
         try:
             subprocess.run(command, shell=True, check=True, stdout=subprocess.DEVNULL,
                            stderr=open('ffmpeg_error.log', 'a'))
