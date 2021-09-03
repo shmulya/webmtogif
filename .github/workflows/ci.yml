@@ -28,6 +28,7 @@ jobs:
   molecule:
     runs-on: ubuntu-20.04
     steps:
+      - uses: actions/checkout@v2
       - name: Run ansible deploy tests
         uses: robertdebock/molecule-action@2.6.17
         with:
