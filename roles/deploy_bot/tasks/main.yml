@@ -72,13 +72,12 @@
     owner: root
     group: root
   become: true
-  # TODO call systemctl daemon-reload after changes
+  # TODO call systemctl daemon-reload after change file
 
-# FIXME: "multi-user.targetroot" is not a valid unit name.
 # - name: enable service bot
-#   service:
-#     cmd: "sudo systemctl enable webmtogif"
+#  command:
+#    cmd: "sudo systemctl enable webmtogif"
 
 - name: starting bot
-  service:
+  command:
     cmd: "sudo systemctl start webmtogif"

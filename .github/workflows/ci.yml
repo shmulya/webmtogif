@@ -37,3 +37,5 @@ jobs:
         with:
           image: "docker.io/geerlingguy/docker-ubuntu2004-ansible"
           scenario: default
+          command: test
+
