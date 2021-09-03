@@ -1,0 +1,28 @@
+---
+dependency:
+  name: galaxy
+driver:
+  name: docker
+platforms:
+  - name: webmtogif_deploy_test
+    image: docker.io/geerlingguy/docker-ubuntu2004-ansible
+    # for simulate systemd
+    # Also, do not install systemd>=248 in host system, it broke tests
+    # https://github.com/moby/moby/issues/42275
+    command: "/lib/systemd/systemd"
+    volumes:
+      - /sys/fs/cgroup:/sys/fs/cgroup:ro
+    capabilities:
+      - SYS_ADMIN
+    privileged: true
+    pre_build_image: true
+provisioner:
+  name: ansible
+  sudo: yes
+verifier:
+  name: ansible
+lint: |
+  set -e
+  yamllint roles/
+  ansible-lint
+  flake8 roles/

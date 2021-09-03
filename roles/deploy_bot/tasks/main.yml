@@ -11,6 +11,10 @@
     state: absent
   become: yes
 
+- name: Create user
+  ansible.builtin.user:
+    name: telegram-bot
+
 - name: copy bot files
   copy:
     src: "app/"
