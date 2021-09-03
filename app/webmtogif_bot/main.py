@@ -1,16 +1,16 @@
-import yaml
-from modules.bot import Bot, Update
-from modules.converter import Converter
-from threading import Thread
-import re
 import logging
 from json import dumps
 from os import getcwd
+from threading import Thread
 
-logging.basicConfig(filename='bot.log', filemode='a', format='%(asctime)s - %(levelname)s - %(message)s',
+from .config import config
+from .modules.bot import Bot, Update
+from .modules.converter import Converter
+
+logging.basicConfig(filename='bot.log', filemode='a',
+                    format='%(asctime)s - %(levelname)s - %(message)s',
                     level=logging.INFO)
 
-config = yaml.load(open('./config/config.yml', 'r').read())
 bot = Bot(config['token'])
 
 
@@ -42,8 +42,9 @@ def video(u):
                         c.delete(result['path'])
                     else:
                         logging.warning('File uploading error: ' + str(sending['error']))
-                        bot.edit_message(u.chat_id, u.callback['message_id'], 'Ошибка при отправке. Возможно, '
-                                                                              'файл имеет слишком большой размер.')
+                        bot.edit_message(u.chat_id, u.callback['message_id'],
+                                         'Ошибка при отправке. Возможно, '
+                                         'файл имеет слишком большой размер.')
                         c.delete(path)
                         c.delete(result['path'])
             else:
@@ -77,8 +78,9 @@ def video(u):
                         c.delete(result['path'])
                     else:
                         logging.warning('File uploading error: ' + str(sending['error']))
-                        bot.edit_message(u.chat_id, u.callback['message_id'], 'Ошибка при отправке. Возможно, '
-                                                                              'файл имеет слишком большой размер.')
+                        bot.edit_message(u.chat_id, u.callback['message_id'],
+                                         'Ошибка при отправке. Возможно, '
+                                         'файл имеет слишком большой размер.')
                         c.delete(path)
                         c.delete(result['path'])
             else:
@@ -98,7 +100,8 @@ def formatting(u):
         result = c.download(u.url, u.chat_id)
     except Exception as e:
         logging.error('File loading error: ' + str(e))
-        bot.edit_message(u.chat_id, msg_id, 'Не удалось загрузить видео. Возможно, указана неверная ссылка.')
+        bot.edit_message(u.chat_id, msg_id,
+                         'Не удалось загрузить видео. Возможно, указана неверная ссылка.')
     else:
         if result['status'] == 'success':
             keyboard = {
@@ -121,14 +124,16 @@ def formatting(u):
                     ]
                 ]
             }
-            bot.edit_message(u.chat_id, msg_id, 'Видео успешно загружено. Выберите действие.', dumps(keyboard))
+            bot.edit_message(u.chat_id, msg_id, 'Видео успешно загружено. Выберите действие.',
+                             dumps(keyboard))
         else:
             logging.warning('File loading error: ' + str(result['error']))
-            bot.edit_message(u.chat_id, msg_id, 'Не удалось загрузить видео. Возможно, файл, находящийся по ссылке, '
-                                                'имеет расширение отличное от webm.')
+            bot.edit_message(u.chat_id, msg_id,
+                             'Не удалось загрузить видео. Возможно, файл, находящийся по ссылке, '
+                             'имеет расширение отличное от webm.')
 
 
-if __name__ == '__main__':
+def init():
     updates = bot.get_updates()
     if updates['status'] != 'ok':
         logging.fatal('Getting updates error: ' + updates['error'])
@@ -142,8 +147,9 @@ if __name__ == '__main__':
             update = Update(i)
             if update.type == 'command':
                 if update.command == '/start':
-                    bot.send_message(update.chat_id, 'Этот бот умеет конвертировать видео из webm в mp4 или gif!\n\n'
-                                                     '/help чтобы узнать подробности.')
+                    bot.send_message(update.chat_id,
+                                     'Этот бот умеет конвертировать видео из webm в mp4 или gif!\n\n'
+                                     '/help чтобы узнать подробности.')
 
                 elif update.command == '/help':
                     message = 'Этот бот умеет ковертировать видео из формата webm в mp4 или gif!\n\n' \
