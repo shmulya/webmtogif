@@ -4,3 +4,4 @@ pytest
 
 
 molecule[ansible,docker,lint]
+testinfra

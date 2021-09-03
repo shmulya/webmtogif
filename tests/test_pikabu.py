@@ -1,4 +1,4 @@
-from app.modules.pikabu import PikabuVideo
+from app.webmtogif_bot.modules.pikabu import PikabuVideo
 
 
 def test_search_video():

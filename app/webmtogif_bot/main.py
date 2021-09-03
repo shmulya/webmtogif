@@ -3,9 +3,9 @@ from json import dumps
 from os import getcwd
 from threading import Thread
 
-from app.config import config
-from modules.bot import Bot, Update
-from modules.converter import Converter
+from .config import config
+from .modules.bot import Bot, Update
+from .modules.converter import Converter
 
 logging.basicConfig(filename='bot.log', filemode='a',
                     format='%(asctime)s - %(levelname)s - %(message)s',
@@ -133,7 +133,7 @@ def formatting(u):
                              'имеет расширение отличное от webm.')
 
 
-if __name__ == '__main__':
+def init():
     updates = bot.get_updates()
     if updates['status'] != 'ok':
         logging.fatal('Getting updates error: ' + updates['error'])

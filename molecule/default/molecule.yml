@@ -1,4 +1,14 @@
 ---
+scenario:
+  test_sequence:
+    - destroy
+    - create
+    - converge
+    # FIXME
+    # - idempotence
+    - verify
+    - lint
+
 dependency:
   name: galaxy
 driver:
@@ -18,11 +28,16 @@ platforms:
     pre_build_image: true
 provisioner:
   name: ansible
-  sudo: yes
+  sudo: true
 verifier:
-  name: ansible
+  name: testinfra
+
+ansible:
+  vault_password_file: .vault
+
+# Temporary disable ansible-lint
 lint: |
   set -e
   yamllint roles/
-  ansible-lint
   flake8 roles/
+

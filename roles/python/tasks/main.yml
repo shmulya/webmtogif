@@ -2,7 +2,7 @@
 
 - name: install python
   apt:
-    update_cache: yes
+    update_cache: true
     pkg:
       - python3
       - python3-pip

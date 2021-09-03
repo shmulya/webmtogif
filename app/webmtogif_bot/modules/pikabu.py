@@ -2,7 +2,7 @@ import re
 
 import requests
 
-from app.config import config
+from ..config import config
 
 
 class PikabuVideo:

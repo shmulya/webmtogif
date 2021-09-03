@@ -7,5 +7,8 @@ application_path: '/home/telegram-bot/webmtogif'
 token: ''
 
 # Example
-# pikabu_cookies: {'pkbRem': '{"uid": 100500,"username":"BotUser","rem":"dxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxe","tries":0}'}
+# pikabu_cookies: {
+#  'pkbRem': '{"uid": 100500,"username":"BotUser",
+#    "rem":"dxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxe","tries":0}'
+# }
 pikabu_cookies: {}

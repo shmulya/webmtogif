@@ -1,4 +1,11 @@
 ---
+- hosts: all
+  become: true
+  gather_facts: false
+
+  tasks:
+    - include_vars: "../../config/config.yml"
+
 - import_playbook: "../../prepare.yml"
 
 - import_playbook: "../../bot.yml"
