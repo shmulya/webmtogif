@@ -1,0 +1,6 @@
+-r ./requirements.txt
+
+pytest
+
+
+molecule[ansible,docker,lint]
