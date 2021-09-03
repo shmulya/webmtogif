@@ -4,7 +4,7 @@ from typing import Union
 
 import yaml
 
-PROJECT_ROOT = Path(__file__).parent.parent
+PROJECT_ROOT = Path(__file__).parent / "../../"
 CONFIG_PATH = os.environ.get('BOT_CONFIG', PROJECT_ROOT / './config/config.yml')
 
 class Config:
