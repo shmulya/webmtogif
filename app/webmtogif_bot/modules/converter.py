@@ -1,7 +1,7 @@
 import subprocess
 import requests
 from os import getcwd, remove
-from modules.pikabu import PikabuVideo
+from .pikabu import PikabuVideo
 
 class Converter:
 
