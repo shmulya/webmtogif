@@ -4,7 +4,7 @@
   gather_facts: false
 
   tasks:
-    - include_vars: "../../config/config.yml"
+    - include_vars: "../../app/config/config.yml"
 
 - import_playbook: "../../prepare.yml"
 
