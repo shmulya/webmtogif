@@ -1,6 +1,6 @@
 venv
 .idea
-config/config.yml
+app/config/config.yml
 ### Python template
 # Byte-compiled / optimized / DLL files
 __pycache__/

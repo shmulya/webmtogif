@@ -1,9 +1,10 @@
 import logging
 from datetime import datetime
 from json import dumps
-from os import getcwd
+from os import getcwd, remove
 from threading import Thread
 
+import requests
 
 from .config import config
 from .modules.bot import Bot, Update
@@ -211,9 +212,10 @@ def init():
                     logging.error(f'User registration error: {result["data"]}')
             if update.type == 'command':
                 if update.command == '/start':
-                    bot.send_message(update.chat_id, 'Этот бот умеет конвертировать webm видео в формат gif и mp4,'
-                                                     'а также загружать видео из TikTok.\n\n'
-                                                     '/help чтобы узнать подробности.')
+                    bot.send_message(update.chat_id,
+                                     'Этот бот умеет конвертировать webm видео в формат gif и mp4,'
+                                     'а также загружать видео из TikTok.\n\n'
+                                     '/help чтобы узнать подробности.')
                 elif update.command == '/help':
                     message = 'Чтобы конвертировать webm видео, отправь боту ссылку на него и выбери нужное ' \
                               'действие.\n\n' \
@@ -223,7 +225,8 @@ def init():
                 elif update.command == '/stats':
                     result = get_stats(i, update)
                     if result['status']:
-                        bot.send_message(update.chat_id, f'Всего пользователей: {len(result["data"])}')
+                        bot.send_message(update.chat_id,
+                                         f'Всего пользователей: {len(result["data"])}')
                     else:
                         logging.error(f'Getting stats error: {result["data"]}')
                         bot.send_message(update.chat_id, 'Произошла ошибка.')

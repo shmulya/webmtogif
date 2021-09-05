@@ -6,6 +6,6 @@
   tasks:
     - include_vars: "../../app/config/config.yml"
 
-- import_playbook: "../../prepare.yml"
+- import_playbook: "../../bot_prepare.yml"
 
 - import_playbook: "../../bot.yml"
