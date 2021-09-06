@@ -197,11 +197,12 @@ if __name__ == '__main__':
             update = Update(i)
             if i.get('message') is not None:
                 user_id = i['message']['from']['id']
-            else:
+            elif i.get('callback_query') is not None:
                 user_id = i['callback_query']['from']['id']
-            result = register_user(user_id)
-            if not result['status']:
-                logging.error(f'User registration error: {result["data"]}')
+            if user_id:
+                result = register_user(user_id)
+                if not result['status']:
+                    logging.error(f'User registration error: {result["data"]}')
             if update.type == 'command':
                 if update.command == '/start':
                     bot.send_message(update.chat_id, 'Этот бот умеет конвертировать webm видео в формат gif и mp4,'
