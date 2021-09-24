@@ -1,0 +1,57 @@
+---
+
+- name: make backend directory
+  file:
+    state: directory
+    path: "{{ tiktokapi_workdir }}"
+    owner: "tiktokapi"
+  tags:
+    - deploy
+
+- name: make files directory
+  file:
+    state: directory
+    path: "{{ tiktokapi_workdir }}/files/"
+    owner: "tiktokapi"
+  tags:
+    - deploy
+
+- name: make logging dirrectory
+  file:
+    state: directory
+    path: "/var/log/tiktokapi/"
+    owner: "tiktokapi"
+  tags:
+    - deploy
+
+- name: copy application files
+  copy:
+    src: "tiktok_app/"
+    dest: "{{ tiktokapi_workdir }}/"
+    owner: "tiktokapi"
+  tags:
+    - deploy
+
+- name: create uwsgi.ini
+  copy:
+    src: uwsgi.ini
+    dest: "{{ tiktokapi_workdir }}/uwsgi.ini"
+    owner: "tiktokapi"
+  tags:
+    - deploy
+
+- name: create systemd unit
+  template:
+    src: tiktokapi.service.j2
+    dest: /etc/systemd/system/tiktokapi.service
+    mode: 755
+  notify: restart tiktokapi
+  tags:
+    - deploy
+
+- name: restart tiktokapi
+  service:
+    name: tiktokapi
+    state: restarted
+  tags:
+    - deploy

@@ -1,0 +1,8 @@
+---
+
+- hosts: all
+  become: yes
+  gather_facts: true
+
+  roles:
+    - deploy_tiktok_api

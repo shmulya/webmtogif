@@ -1,0 +1,6 @@
+---
+
+- name: restart tiktokapi
+  service:
+    name: tiktokapi
+    state: restarted
