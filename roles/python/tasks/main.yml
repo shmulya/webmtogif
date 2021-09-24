@@ -2,9 +2,11 @@
 
 - name: install python
   apt:
+    update_cache: true
     pkg:
       - python3
       - python3-pip
+      - python3-venv
 
 - name: install virtual environment
   command:

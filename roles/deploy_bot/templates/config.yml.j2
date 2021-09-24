@@ -8,3 +8,4 @@ admins:
   {% for item in bot_admins %}
   - {{ item }}
   {% endfor %}
+{{ {'pikabu_cookies': pikabu_cookies} | to_nice_yaml }}

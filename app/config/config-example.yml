@@ -1,0 +1,10 @@
+token: ''
+url: "tiktok_api_url"
+server: "mysql_server_host"
+username: "mysql_username"
+passwd: "mysql_passwd"
+db: "mysql_db"
+
+pikabu_cookies: {}
+# Example
+# pikabu_cookies: {'pkbRem': '{"uid": 100500,"username":"BotUser","rem":"dxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxe","tries":0}'}

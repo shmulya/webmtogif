@@ -1,18 +1,20 @@
-import yaml
 import logging
-import requests
-from modules.bot import Bot, Update
-from modules.converter import Converter
-from modules.mysql_connector import MysqlCollector
-from threading import Thread
+from datetime import datetime
 from json import dumps
 from os import getcwd, remove
-from datetime import datetime
+from threading import Thread
 
-logging.basicConfig(filename='bot.log', filemode='a', format='%(asctime)s - %(levelname)s - %(message)s',
+import requests
+
+from .config import config
+from .modules.bot import Bot, Update
+from .modules.converter import Converter
+from .modules.mysql_connector import MysqlCollector
+
+logging.basicConfig(filename='bot.log', filemode='a',
+                    format='%(asctime)s - %(levelname)s - %(message)s',
                     level=logging.INFO)
 
-config = yaml.load(open('./config/config.yml', 'r').read())
 bot = Bot(config['token'])
 
 
@@ -69,8 +71,9 @@ def video(u):
                         c.delete(result['path'])
                     else:
                         logging.warning('File uploading error: ' + str(sending['error']))
-                        bot.edit_message(u.chat_id, u.callback['message_id'], 'Ошибка при отправке. Возможно, '
-                                                                              'файл имеет слишком большой размер.')
+                        bot.edit_message(u.chat_id, u.callback['message_id'],
+                                         'Ошибка при отправке. Возможно, '
+                                         'файл имеет слишком большой размер.')
                         c.delete(path)
                         c.delete(result['path'])
             else:
@@ -104,8 +107,9 @@ def video(u):
                         c.delete(result['path'])
                     else:
                         logging.warning('File uploading error: ' + str(sending['error']))
-                        bot.edit_message(u.chat_id, u.callback['message_id'], 'Ошибка при отправке. Возможно, '
-                                                                              'файл имеет слишком большой размер.')
+                        bot.edit_message(u.chat_id, u.callback['message_id'],
+                                         'Ошибка при отправке. Возможно, '
+                                         'файл имеет слишком большой размер.')
                         c.delete(path)
                         c.delete(result['path'])
             else:
@@ -125,7 +129,8 @@ def formatting(u):
         result = c.download(u.url, u.chat_id)
     except Exception as e:
         logging.error('File loading error: ' + str(e))
-        bot.edit_message(u.chat_id, msg_id, 'Не удалось загрузить видео. Возможно, указана неверная ссылка.')
+        bot.edit_message(u.chat_id, msg_id,
+                         'Не удалось загрузить видео. Возможно, указана неверная ссылка.')
     else:
         if result['status'] == 'success':
             keyboard = {
@@ -148,11 +153,13 @@ def formatting(u):
                     ]
                 ]
             }
-            bot.edit_message(u.chat_id, msg_id, 'Видео успешно загружено. Выберите действие.', dumps(keyboard))
+            bot.edit_message(u.chat_id, msg_id, 'Видео успешно загружено. Выберите действие.',
+                             dumps(keyboard))
         else:
             logging.warning('File loading error: ' + str(result['error']))
-            bot.edit_message(u.chat_id, msg_id, 'Не удалось загрузить видео. Возможно, файл, находящийся по ссылке, '
-                                                'имеет расширение отличное от webm.')
+            bot.edit_message(u.chat_id, msg_id,
+                             'Не удалось загрузить видео. Возможно, файл, находящийся по ссылке, '
+                             'имеет расширение отличное от webm.')
 
 
 def tiktok(u):
@@ -183,7 +190,7 @@ def tiktok(u):
             logging.error(f'TikTok downloading error: {result["error"]}')
 
 
-if __name__ == '__main__':
+def init():
     updates = bot.get_updates()
     if updates['status'] != 'ok':
         logging.fatal(f'Getting updates error: {updates["error"]}')
@@ -205,9 +212,10 @@ if __name__ == '__main__':
                     logging.error(f'User registration error: {result["data"]}')
             if update.type == 'command':
                 if update.command == '/start':
-                    bot.send_message(update.chat_id, 'Этот бот умеет конвертировать webm видео в формат gif и mp4,'
-                                                     'а также загружать видео из TikTok.\n\n'
-                                                     '/help чтобы узнать подробности.')
+                    bot.send_message(update.chat_id,
+                                     'Этот бот умеет конвертировать webm видео в формат gif и mp4,'
+                                     'а также загружать видео из TikTok.\n\n'
+                                     '/help чтобы узнать подробности.')
                 elif update.command == '/help':
                     message = 'Чтобы конвертировать webm видео, отправь боту ссылку на него и выбери нужное ' \
                               'действие.\n\n' \
@@ -217,7 +225,8 @@ if __name__ == '__main__':
                 elif update.command == '/stats':
                     result = get_stats(i, update)
                     if result['status']:
-                        bot.send_message(update.chat_id, f'Всего пользователей: {len(result["data"])}')
+                        bot.send_message(update.chat_id,
+                                         f'Всего пользователей: {len(result["data"])}')
                     else:
                         logging.error(f'Getting stats error: {result["data"]}')
                         bot.send_message(update.chat_id, 'Произошла ошибка.')

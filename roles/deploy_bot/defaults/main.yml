@@ -2,6 +2,7 @@
 
 ansible_python_interpreter: '/usr/bin/python3'
 application_path: '/home/telegram-bot/webmtogif'
+# secure parameters
 bot_token: ''
 bot_admins: []
 tiktok_api_url: ''
@@ -9,3 +10,10 @@ mysql_server: ''
 mysql_username: ''
 mysql_passwd: ''
 mysql_db: ''
+
+# Example
+# pikabu_cookies: {
+#  'pkbRem': '{"uid": 100500,"username":"BotUser",
+#    "rem":"dxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxe","tries":0}'
+# }
+pikabu_cookies: {}
