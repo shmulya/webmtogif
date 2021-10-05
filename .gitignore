@@ -1,0 +1,5 @@
+*.log
+venv
+__pychance__
+.idea
+app/config/config.yml
