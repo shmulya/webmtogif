@@ -7,11 +7,12 @@ import logging
 
 config = yaml.safe_load(open('config/config.yml'))
 
-bot = telebot.AsyncTeleBot(**config['bot'])
+telebot.apihelper.ENABLE_MIDDLEWARE = True
+bot = telebot.TeleBot(**config['bot'])
 
 
-@bot.message_handler()
-def registration(message):
+@bot.middleware_handler(update_types=['message'])
+def registration(bot_instance, message):
     collector = MysqlCollector(**config['sql'])
     user_id = message.from_user.id
     r = collector.select(table='users', where=f'user_id={user_id}')
@@ -27,6 +28,14 @@ def registration(message):
 
 @bot.message_handler(commands=['start'])
 def start(message):
+    text = 'Этот бот умеет конвертировать webm видео в формат gif и mp4,' \
+           'а также загружать видео из TikTok.\n\n' \
+           '/help чтобы узнать подробности.'
+    bot.send_message(chat_id=message.chat.id, text=text)
+
+
+@bot.message_handler(commands=['help'])
+def info(message):
     text = 'Чтобы конвертировать webm видео, отправь боту ссылку на него и выбери нужное ' \
            'действие.\n\n' \
            'Чтобы загрузить видео из TikTok, просто отправь на него ссылку\n\n' \
@@ -34,23 +43,14 @@ def start(message):
     bot.send_message(chat_id=message.chat.id, text=text)
 
 
-@bot.message_handler(commands=['help'])
-def info(message):
-    text = 'Этот бот умеет конвертировать webm видео в формат gif и mp4,' \
-           'а также загружать видео из TikTok.\n\n' \
-           '/help чтобы узнать подробности.'
-    bot.send_message(chat_id=message.chat.id, text=text)
-
-
-@bot.message_handler()
+@bot.message_handler(func=lambda message: message.entities and message.entities[0].type == 'url')
 def url(message):
-    if message.entities and message.entities[0].type == 'url':
-        entity = message.entities[0]
-        link = message.text[entity.offset:entity.offset + entity.length]
-        if 'tiktok' in link:
-            tiktok(message=message, link=link)
-        else:
-            get_video(message=message, link=link)
+    entity = message.entities[0]
+    link = message.text[entity.offset:entity.offset + entity.length]
+    if 'tiktok' in link:
+        tiktok(message=message, link=link)
+    else:
+        get_video(message=message, link=link)
 
 
 @bot.message_handler(commands=['stats'])
