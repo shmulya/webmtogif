@@ -14,11 +14,11 @@ bot = telebot.AsyncTeleBot(**config['bot'])
 def registration(message):
     collector = MysqlCollector(**config['sql'])
     user_id = message.from_user.id
-    r = collector.select(table='bot_stats', where=f'user_id={user_id}')
+    r = collector.select(table='users', where=f'user_id={user_id}')
     if r['status']:
         if r['data']:
             time = datetime.isoformat(datetime.now())
-            r = collector.insert(table='bot_stats', data={'user_id': user_id, 'time': time})
+            collector.insert(table='users', data={'user_id': user_id, 'time': time})
             logging.info(f'New user {user_id} registered')
     else:
         logging.error(f'User registration error: {r["data"]}')
