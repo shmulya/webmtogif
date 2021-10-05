@@ -1,7 +1,7 @@
 import requests
 import telebot
 from telebot.types import InlineKeyboardMarkup, InlineKeyboardButton
-from app.modules.converter import Converter
+from modules.converter import Converter
 import logging
 import yaml
 from os import remove, getcwd
