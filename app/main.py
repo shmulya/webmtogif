@@ -1,7 +1,7 @@
 import telebot
 import yaml
-from app.modules.mysql_connector import MysqlCollector
-from app.modules.funcs import tiktok, get_video, convert
+from modules.mysql_connector import MysqlCollector
+from modules.funcs import tiktok, get_video, convert
 from datetime import datetime
 import logging
 

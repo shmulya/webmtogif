@@ -1,9 +1,14 @@
 import requests
-from app.main import bot, config
+import telebot
 from telebot.types import InlineKeyboardMarkup, InlineKeyboardButton
 from app.modules.converter import Converter
 import logging
+import yaml
 from os import remove, getcwd
+
+config = yaml.safe_load(open('config/config.yml'))
+
+bot = telebot.TeleBot(**config['bot'])
 
 
 def tiktok(message, link):
@@ -13,16 +18,16 @@ def tiktok(message, link):
         r = requests.post(url=url, data={'url': link}).json()
     except Exception as e:
         logging.error(f'Tiktok downloading error: {e}')
-        bot.edit_message(chat_id=msg.chat.id, message_id=msg.id, text='Не удалось загрузить видео.')
+        bot.edit_message_text(chat_id=msg.chat.id, message_id=msg.id, text='Не удалось загрузить видео.')
     else:
         if r['status'] == 'success':
-            bot.edit_message(chat_id=msg.chat.id, message_id=msg.id, text='Отправка видео...')
+            bot.edit_message_text(chat_id=msg.chat.id, message_id=msg.id, text='Отправка видео...')
             try:
                 vid = open(r['path'], 'rb')
                 bot.send_video(chat_id=msg.chat.id, data=vid)
             except Exception as e:
                 logging.error(f'Video uploading error: {e}')
-                bot.edit_message(chat_id=msg.chat.id, message_id=msg.id, text='Ошибка при отправке видео.')
+                bot.edit_message_text(chat_id=msg.chat.id, message_id=msg.id, text='Ошибка при отправке видео.')
             else:
                 bot.delete_message(chat_id=msg.chat.id, message_id=msg.id)
             finally:
