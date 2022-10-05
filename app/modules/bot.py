@@ -5,7 +5,7 @@ class Bot:
     def __init__(self, token):
         self.url = 'https://api.telegram.org/bot{}/'.format(token)
         try:
-            response = requests.get(url=self.url + 'getMe').json()
+            response = requests.get(url=self.url + 'getMe', timeout=35).json()
         except Exception as e:
             raise e
         else:
@@ -16,7 +16,7 @@ class Bot:
         params = {'timeout': timeout, 'offset': offset}
         while True:
             try:
-                response = requests.get(url=self.url + 'getUpdates', params=params).json()
+                response = requests.get(url=self.url + 'getUpdates', params=params, timeout=35).json()
             except Exception as e:
                 return {'status': 'error', 'error': e}
             else:
@@ -30,7 +30,7 @@ class Bot:
     def send_message(self, chat_id, text, reply_markup=None):
         params = {'chat_id': chat_id, 'text': text, 'reply_markup': reply_markup}
         try:
-            response = requests.get(url=self.url + 'sendMessage', params=params).json()
+            response = requests.get(url=self.url + 'sendMessage', params=params, timeout=35).json()
         except Exception as e:
             return {'status': 'error', 'error': e}
         else:
@@ -49,7 +49,7 @@ class Bot:
             pass
         files = {'animation': file}
         try:
-            response = requests.post(url=self.url + 'sendAnimation', params=params, files=files).json()
+            response = requests.post(url=self.url + 'sendAnimation', params=params, files=files, timeout=35).json()
         except Exception as e:
             return {'status': 'error', 'error': e}
         else:
@@ -68,7 +68,7 @@ class Bot:
             pass
         files = {'video': file}
         try:
-            response = requests.post(url=self.url + 'sendVideo', params=params, files=files).json()
+            response = requests.post(url=self.url + 'sendVideo', params=params, files=files, timeout=45).json()
         except Exception as e:
             return {'status': 'error', 'error': e}
         else:
@@ -80,7 +80,7 @@ class Bot:
     def delete_message(self, chat_id, message_id):
         params = {'chat_id': chat_id, 'message_id': message_id}
         try:
-            response = requests.get(url=self.url + 'deleteMessage', params=params).json()
+            response = requests.get(url=self.url + 'deleteMessage', params=params, timeout=35).json()
         except Exception as e:
             return {'status': 'error', 'error': e}
         else:
@@ -92,7 +92,7 @@ class Bot:
     def edit_message(self, chat_id, message_id, text, reply_markup=None):
         params = {'chat_id': chat_id, 'message_id': message_id, 'text': text, 'reply_markup': reply_markup}
         try:
-            response = requests.get(url=self.url + 'editMessageText', params=params).json()
+            response = requests.get(url=self.url + 'editMessageText', params=params, timeout=35).json()
         except Exception as e:
             return {'status': 'error', 'error': e}
         else:
@@ -104,7 +104,7 @@ class Bot:
     def answer_callback_query(self, callback_query_id):
         params = {'callback_query_id': callback_query_id}
         try:
-            response = requests.get(url=self.url + 'answerCallbackQuery', params=params).json()
+            response = requests.get(url=self.url + 'answerCallbackQuery', params=params, timeout=35).json()
         except Exception as e:
             return {'status': 'error', 'error': e}
         else:
