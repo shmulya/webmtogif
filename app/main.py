@@ -8,6 +8,7 @@ from threading import Thread
 from json import dumps
 from os import getcwd, remove
 from datetime import datetime
+from time import sleep
 
 logging.basicConfig(filename='bot.log', filemode='a', format='%(asctime)s - %(levelname)s - %(message)s',
                     level=logging.INFO)
@@ -199,6 +200,8 @@ if __name__ == '__main__':
                 user_id = i['message']['from']['id']
             elif i.get('callback_query') is not None:
                 user_id = i['callback_query']['from']['id']
+            else:
+                user_id = False
             if user_id:
                 result = register_user(user_id)
                 if not result['status']:
@@ -241,8 +244,9 @@ if __name__ == '__main__':
                     logging.error(f'Getting updates error {i}/9: {updates["error"]}')
                 else:
                     logging.fatal(f'Getting updates error {i}/9: {updates["error"]}')
+                sleep(1)
             else:
                 break
             i += 1
-
+        i = 0
         offset = updates['last_update_id'] + 1
